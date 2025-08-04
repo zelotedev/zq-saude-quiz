@@ -3,1020 +3,701 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>ZeFraEva - Sistema de Gestão de Restaurante e Hospedagem</title>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet" />
+<title>ZQ Saúde+ Quiz</title>
 <style>
-  /* Reset */
-  *, *::before, *::after {
-    box-sizing: border-box;
-  }
+  @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
   body {
-    margin: 0; padding: 0;
-    font-family: 'Montserrat', sans-serif;
-    background: #f0f3f7;
-    color: #222;
+    margin:0; padding:0;
+    font-family: 'Roboto', sans-serif;
+    background: #f0f4f8;
+    color: #10375c;
     min-height: 100vh;
-    display: flex; flex-direction: column;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
   }
-  header {
-    background: #002855;
-    color: #fff;
-    padding: 1rem 2rem;
-    display: flex; align-items: center; justify-content: space-between;
-    position: sticky; top: 0; z-index: 10;
-    user-select: none;
-  }
-  header h1 {
-    margin: 0;
-    font-weight: 600;
-    font-size: 1.5rem;
-    letter-spacing: 2px;
-    cursor: default;
-  }
-  /* Letra F que abre painel ADM */
-  span.f-spot {
+
+  /* Splash Screen */
+  #splash {
+    position: fixed;
+    top:0; left:0; right:0; bottom:0;
+    background: #104e8b;
+    color: #cce7ff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 3rem;
     font-weight: 700;
-    color: #00a0d6;
-    cursor: pointer;
-    outline-offset: 3px;
-  }
-  span.f-spot:focus {
-    outline: 2px solid #00a0d6;
-    outline-offset: 3px;
-  }
-  .mode-toggle {
-    background: transparent;
-    border: none;
-    color: #00a0d6;
-    font-size: 1.4rem;
-    cursor: pointer;
+    text-align: center;
+    z-index: 9999;
     user-select: none;
-    transition: color 0.3s ease;
   }
-  .mode-toggle:hover, .mode-toggle:focus {
-    color: #0077b6;
-    outline: none;
+  #splash small {
+    font-size: 1.2rem;
+    margin-top: 0.6rem;
+    font-weight: 400;
+  }
+  /* Subtítulo animação com imagens (simples) */
+  #splash-images {
+    display: flex;
+    margin-top: 1rem;
+    gap: 15px;
+  }
+  #splash-images img {
+    width: 60px;
+    height: 60px;
+    filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.2));
+    animation: bounce 2s infinite alternate;
+  }
+  #splash-images img:nth-child(2) { animation-delay: 0.3s; }
+  #splash-images img:nth-child(3) { animation-delay: 0.6s; }
+  #splash-images img:nth-child(4) { animation-delay: 0.9s; }
+
+  @keyframes bounce {
+    from { transform: translateY(0); }
+    to { transform: translateY(-15px); }
   }
 
-  main {
-    flex-grow: 1;
-    max-width: 900px;
-    margin: 1rem auto 2rem;
-    padding: 0 1rem;
-    width: 100%;
-  }
-  section {
+  /* Containers */
+  .container {
     background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 0 15px rgb(0 0 0 / 0.07);
-    padding: 1.5rem 2rem;
-    margin-bottom: 1.5rem;
-  }
-  section h2 {
-    margin-top: 0;
-    font-weight: 600;
-    color: #002855;
-    border-bottom: 2px solid #00a0d6;
-    padding-bottom: 0.3rem;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+    border-radius: 12px;
+    max-width: 480px;
+    width: 90%;
+    margin: 2rem auto;
+    padding: 20px 30px;
   }
 
-  form {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem 2rem;
-  }
-  form .full-width {
-    grid-column: 1 / -1;
-  }
+  /* Formulário Login */
   label {
     display: block;
+    margin-top: 15px;
     font-weight: 600;
-    margin-bottom: 0.3rem;
-    color: #002855;
+    color: #10375c;
   }
-  input[type="text"],
-  input[type="email"],
-  input[type="tel"],
-  input[type="date"],
-  input[type="number"],
-  input[type="time"],
-  select,
-  textarea {
+  input {
     width: 100%;
-    padding: 0.45rem 0.6rem;
-    border: 1.8px solid #00a0d6;
-    border-radius: 6px;
-    font-size: 1rem;
-    font-weight: 400;
-    color: #002855;
-    transition: border-color 0.3s ease;
-    font-family: 'Montserrat', sans-serif;
-  }
-  input[type="text"]:focus,
-  input[type="email"]:focus,
-  input[type="tel"]:focus,
-  input[type="date"]:focus,
-  input[type="number"]:focus,
-  input[type="time"]:focus,
-  select:focus,
-  textarea:focus {
-    border-color: #0077b6;
-    outline: none;
-    box-shadow: 0 0 5px #0077b6aa;
-  }
-  textarea {
-    resize: vertical;
-    min-height: 80px;
-    font-family: 'Montserrat', sans-serif;
-  }
-
-  .checkbox-group {
-    grid-column: 1 / -1;
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    font-weight: 500;
-    font-size: 0.95rem;
-    color: #002855;
-  }
-  .checkbox-group a {
-    color: #0077b6;
-    text-decoration: none;
-  }
-  .checkbox-group a:hover,
-  .checkbox-group a:focus {
-    text-decoration: underline;
-    outline: none;
-  }
-
-  .submit-btn {
-    grid-column: 1 / -1;
-    background-color: #0077b6;
-    border: none;
-    color: white;
-    font-weight: 700;
-    font-size: 1.1rem;
-    padding: 0.75rem 1rem;
+    padding: 10px;
+    margin-top: 6px;
+    border: 1.8px solid #10375c;
     border-radius: 8px;
-    cursor: pointer;
-    user-select: none;
-    transition: background-color 0.3s ease;
+    font-size: 1rem;
+    color: #10375c;
+    background: #f5faff;
   }
-  .submit-btn:hover,
-  .submit-btn:focus {
-    background-color: #005f86;
+  input:focus {
     outline: none;
+    border-color: #4a90e2;
+    box-shadow: 0 0 6px #4a90e2;
+  }
+  button {
+    margin-top: 20px;
+    background: #10375c;
+    color: #cce7ff;
+    border: none;
+    border-radius: 10px;
+    padding: 14px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    font-weight: 700;
+    transition: background-color 0.3s ease;
+    width: 100%;
+  }
+  button:hover {
+    background: #0a2c4e;
   }
 
-  .error-msg {
-    color: #d00000;
-    font-size: 0.9rem;
-    margin-top: -0.6rem;
-    margin-bottom: 0.6rem;
-    grid-column: 1 / -1;
-  }
-
-  /* Consulta Status Cliente */
-  #consultaStatus input[type="text"] {
-    max-width: 300px;
-  }
-  #resultadoConsulta {
-    margin-top: 1rem;
-    font-weight: 600;
-    color: #002855;
-  }
-
-  /* Painel ADM */
-  #adminPanel {
+  /* Quiz */
+  #quizContainer {
     display: none;
     flex-direction: column;
   }
-  #adminPanel.visible {
-    display: flex;
-  }
-  #adminPanel h2 {
-    margin-bottom: 0.5rem;
-  }
-  #adminPanel #stats {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 1rem;
-  }
-  #adminPanel #stats div {
-    background: #e1ecf9;
-    padding: 0.6rem 1rem;
-    border-radius: 6px;
+  #question {
+    font-size: 1.3rem;
     font-weight: 600;
-    color: #003366;
-    flex: 1;
+    margin-bottom: 20px;
+    min-height: 70px;
+  }
+  #answers {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  button.answerBtn {
+    background: #d1e8ff;
+    border: 2px solid #10375c;
+    border-radius: 10px;
+    padding: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.25s ease;
+  }
+  button.answerBtn:hover, button.answerBtn:focus {
+    background-color: #10375c;
+    color: #cce7ff;
+    outline: none;
+  }
+
+  /* Timer Bar */
+  #timerBar {
+    height: 15px;
+    width: 100%;
+    background: #e3f0ff;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 20px;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+  }
+  #timerFill {
+    height: 100%;
+    width: 100%;
+    background: #10375c;
+    transition: width 1s linear;
+  }
+
+  /* Score */
+  #scoreBoard {
+    margin-top: 18px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #10375c;
     text-align: center;
   }
-  #searchInput {
-    padding: 0.5rem;
-    font-size: 1rem;
-    border-radius: 6px;
-    border: 1.8px solid #00a0d6;
-    margin-bottom: 1rem;
+
+  /* Botões adicionais */
+  #btnViewRanking, #btnLogout {
+    margin-top: 20px;
+    background: #4a90e2;
+    border-radius: 10px;
+    padding: 12px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: white;
+    border: none;
+    cursor: pointer;
+    width: 100%;
   }
-  table {
+  #btnViewRanking:hover, #btnLogout:hover {
+    background: #357ABD;
+  }
+
+  /* Ranking */
+  #rankingContainer {
+    display: none;
+  }
+  #rankingList {
+    list-style: decimal inside;
+    font-size: 1.2rem;
+    padding-left: 10px;
+    margin-bottom: 20px;
+  }
+  #rankingList li {
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #10375c;
+  }
+  #btnBackToQuiz {
+    background: #4a90e2;
+    border-radius: 10px;
+    border: none;
+    padding: 12px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: white;
+    cursor: pointer;
+    width: 100%;
+  }
+  #btnBackToQuiz:hover {
+    background: #357ABD;
+  }
+
+  /* Admin area - visible only on desktop */
+  @media (max-width: 850px) {
+    #adminArea {
+      display: none !important;
+    }
+  }
+  #adminArea {
+    display: none;
+    max-width: 900px;
+    margin: 2rem auto;
+    background: #cce7ff;
+    border-radius: 15px;
+    padding: 20px 30px;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+  }
+  #adminArea h2 {
+    color: #10375c;
+    margin-bottom: 20px;
+  }
+  #adminUsersList {
+    max-height: 320px;
+    overflow-y: auto;
+    border: 2px solid #10375c;
+    border-radius: 10px;
+    padding: 12px;
+    background: #e8f3ff;
+    color: #10375c;
+    font-size: 0.9rem;
+  }
+  #adminUsersList table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 0.95rem;
   }
-  th, td {
-    border: 1px solid #ccd6eb;
-    padding: 0.6rem 0.8rem;
+  #adminUsersList th, #adminUsersList td {
+    border: 1px solid #10375c;
+    padding: 8px 10px;
     text-align: left;
   }
-  th {
-    background-color: #0077b6;
-    color: white;
-    user-select: none;
-  }
-  tbody tr:nth-child(even) {
-    background-color: #f4f9ff;
-  }
-  tbody tr:hover {
-    background-color: #d9e9ff;
-  }
-  .badge {
-    padding: 0.25rem 0.5rem;
-    border-radius: 12px;
-    font-weight: 700;
-    font-size: 0.85rem;
-    user-select: none;
-  }
-  .badge.pending {
-    background-color: #f9c74f;
-    color: #865d00;
-  }
-  .badge.approved {
-    background-color: #90be6d;
-    color: #2f4a1f;
-  }
-  .badge.refused {
-    background-color: #f94144;
-    color: white;
-  }
-  .btn-small {
-    border: none;
-    background: transparent;
-    cursor: pointer;
-    font-size: 1.1rem;
-    margin: 0 4px;
-    transition: color 0.3s ease;
-  }
-  .btn-small:hover, .btn-small:focus {
-    color: #0077b6;
-    outline: none;
-  }
-  .tooltip {
-    position: relative;
-  }
-  .tooltip:hover::after,
-  .tooltip:focus::after {
-    content: attr(data-tooltip);
-    position: absolute;
-    top: -30px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #0077b6;
+  #adminUsersList th {
+    background-color: #357ABD;
     color: #fff;
-    padding: 0.3rem 0.6rem;
-    border-radius: 4px;
-    white-space: nowrap;
-    font-size: 0.8rem;
-    pointer-events: none;
-    z-index: 20;
   }
-
-  /* Contadores */
-  #statusCounters {
-    margin-bottom: 1rem;
+  #adminButtons {
+    margin-top: 20px;
     display: flex;
-    gap: 1rem;
+    gap: 15px;
+    flex-wrap: wrap;
+  }
+  #adminButtons button {
+    flex: 1 1 200px;
+    background: #10375c;
+    color: #cce7ff;
+    border: none;
+    border-radius: 12px;
+    padding: 12px;
     font-weight: 700;
     font-size: 1rem;
-  }
-  #statusCounters div {
-    flex: 1;
-    text-align: center;
-    padding: 0.6rem 0;
-    border-radius: 6px;
-    color: white;
-    user-select: none;
-  }
-  #statusCounters .total {
-    background-color: #002855;
-  }
-  #statusCounters .pending {
-    background-color: #f9c74f;
-    color: #865d00;
-  }
-  #statusCounters .approved {
-    background-color: #90be6d;
-    color: #2f4a1f;
-  }
-  #statusCounters .refused {
-    background-color: #f94144;
-  }
-
-  /* Contato fixo */
-  .contact-buttons {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    z-index: 9999;
-  }
-  .contact-buttons a {
-    background-color: #00a0d6;
-    color: white;
-    font-size: 1.6rem;
-    padding: 0.6rem 0.8rem;
-    border-radius: 50%;
-    text-align: center;
-    text-decoration: none;
-    box-shadow: 0 4px 8px rgba(0,160,214,0.5);
+    cursor: pointer;
     transition: background-color 0.3s ease;
+  }
+  #adminButtons button:hover {
+    background: #0a2c4e;
+  }
+
+  /* Fixed ad banner */
+  #adBanner {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: #104e8b;
+    color: #cce7ff;
+    font-weight: 700;
+    font-family: 'Roboto', sans-serif;
+    padding: 10px 0;
+    text-align: center;
     user-select: none;
-  }
-  .contact-buttons a:hover,
-  .contact-buttons a:focus {
-    background-color: #0077b6;
-    outline: none;
-  }
-  .contact-buttons .call-btn {
-    background-color: #0077b6;
-  }
-  .contact-buttons .call-btn:hover,
-  .contact-buttons .call-btn:focus {
-    background-color: #005f86;
-  }
-
-  /* Modo escuro */
-  body.dark-mode {
-    background: #121821;
-    color: #e0e0e0;
-  }
-  body.dark-mode header {
-    background: #001f3f;
-    color: #a0c8f0;
-  }
-  body.dark-mode input,
-  body.dark-mode select,
-  body.dark-mode textarea {
-    background: #1c2633;
-    border-color: #285d8f;
-    color: #d1e5ff;
-  }
-  body.dark-mode input:focus,
-  body.dark-mode select:focus,
-  body.dark-mode textarea:focus {
-    border-color: #5599ff;
-    box-shadow: 0 0 5px #5599ffcc;
-    outline: none;
-  }
-  body.dark-mode table,
-  body.dark-mode th,
-  body.dark-mode td {
-    border-color: #27496d;
-  }
-  body.dark-mode th {
-    background-color: #003366;
-  }
-  body.dark-mode tbody tr:nth-child(even) {
-    background-color: #19304e;
-  }
-  body.dark-mode tbody tr:hover {
-    background-color: #22406d;
-  }
-  body.dark-mode .badge.pending {
-    background-color: #f4b942;
-    color: #533a00;
-  }
-  body.dark-mode .badge.approved {
-    background-color: #7ea25b;
-    color: #193000;
-  }
-  body.dark-mode .badge.refused {
-    background-color: #cc2a2a;
-    color: #ffe5e5;
-  }
-  body.dark-mode #statusCounters .total {
-    background-color: #003366;
-  }
-  body.dark-mode #statusCounters .pending {
-    background-color: #f4b942;
-    color: #533a00;
-  }
-  body.dark-mode #statusCounters .approved {
-    background-color: #7ea25b;
-    color: #193000;
-  }
-  body.dark-mode #statusCounters .refused {
-    background-color: #cc2a2a;
-    color: #ffe5e5;
-  }
-  body.dark-mode .contact-buttons a {
-    box-shadow: 0 4px 8px rgba(0,130,200,0.8);
-  }
-
-  /* Responsividade */
-  @media (max-width: 720px) {
-    form {
-      grid-template-columns: 1fr;
-    }
-    #adminPanel #stats {
-      flex-direction: column;
-    }
-    #statusCounters {
-      flex-direction: column;
-    }
-    .contact-buttons {
-      bottom: 15px;
-      right: 15px;
-      flex-direction: row;
-    }
-    .contact-buttons a {
-      padding: 0.5rem;
-      font-size: 1.3rem;
-    }
+    z-index: 10000;
   }
 </style>
 </head>
 <body>
-<header>
-  <h1>
-    Ze<span class="f-spot" tabindex="0" aria-label="Abrir painel administrativo">F</span>raEva
-  </h1>
-  <button class="mode-toggle" aria-pressed="false" aria-label="Alternar modo escuro/claro">🌙</button>
-</header>
-<main>
-  <section aria-labelledby="formTitle" id="formSection">
-    <h2 id="formTitle">Formulário de Reserva</h2>
-    <form id="reservationForm" novalidate>
-      <!-- Dados pessoais -->
-      <label for="nome">Nome Completo *</label>
-      <input type="text" id="nome" name="nome" autocomplete="name" required minlength="3" />
-      <div class="error-msg" id="nomeError" aria-live="polite"></div>
 
-      <label for="email">Email *</label>
-      <input type="email" id="email" name="email" autocomplete="email" required />
-      <div class="error-msg" id="emailError" aria-live="polite"></div>
-
-      <label for="telefone">Telefone (ex: +258...) *</label>
-      <input type="tel" id="telefone" name="telefone" autocomplete="tel" pattern="^\+?\d{8,15}$" required />
-      <div class="error-msg" id="telefoneError" aria-live="polite"></div>
-
-      <label for="bi">Número BI *</label>
-      <input type="text" id="bi" name="bi" minlength="7" maxlength="14" required />
-      <div class="error-msg" id="biError" aria-live="polite"></div>
-
-      <label for="nacionalidade">Nacionalidade</label>
-      <input type="text" id="nacionalidade" name="nacionalidade" autocomplete="country-name" />
-
-      <label for="genero">Gênero</label>
-      <select id="genero" name="genero" >
-        <option value="" selected>-- Selecione --</option>
-        <option value="Masculino">Masculino</option>
-        <option value="Feminino">Feminino</option>
-        <option value="Outro">Outro</option>
-      </select>
-
-      <label for="dataNascimento">Data de Nascimento</label>
-      <input type="date" id="dataNascimento" name="dataNascimento" max="" />
-
-      <label for="nomeAcompanhante">Nome do Acompanhante</label>
-      <input type="text" id="nomeAcompanhante" name="nomeAcompanhante" />
-
-      <!-- Dados da reserva -->
-      <label for="data">Data da Reserva *</label>
-      <input type="date" id="data" name="data" required />
-      <div class="error-msg" id="dataError" aria-live="polite"></div>
-
-      <label for="servico">Serviço *</label>
-      <select id="servico" name="servico" required>
-        <option value="" disabled selected>-- Selecione um serviço --</option>
-        <option value="Restaurante - Jantar">Restaurante - Jantar</option>
-        <option value="Restaurante - Almoço">Restaurante - Almoço</option>
-        <option value="Hospedagem - Quarto Simples">Hospedagem - Quarto Simples</option>
-        <option value="Hospedagem - Quarto Luxo">Hospedagem - Quarto Luxo</option>
-        <option value="Hospedagem - Suíte">Hospedagem - Suíte</option>
-        <option value="Evento">Evento</option>
-        <option value="Outro">Outro</option>
-      </select>
-      <div class="error-msg" id="servicoError" aria-live="polite"></div>
-
-      <label for="numAdultos">Número de Adultos *</label>
-      <input type="number" id="numAdultos" name="numAdultos" min="1" value="1" required />
-      <div class="error-msg" id="numAdultosError" aria-live="polite"></div>
-
-      <label for="numCriancas">Número de Crianças</label>
-      <input type="number" id="numCriancas" name="numCriancas" min="0" value="0" />
-
-      <label for="numNoites">Número de Noites</label>
-      <input type="number" id="numNoites" name="numNoites" min="0" value="0" />
-
-      <label for="horaSaida">Hora Prevista de Saída</label>
-      <input type="time" id="horaSaida" name="horaSaida" />
-      <label for="motivoReserva">Motivo da Reserva</label>
-      <select id="motivoReserva" name="motivoReserva">
-        <option value="" selected>-- Selecione --</option>
-        <option value="Negócios">Negócios</option>
-        <option value="Lazer">Lazer</option>
-        <option value="Evento">Evento</option>
-        <option value="Outro">Outro</option>
-      </select>
-
-      <label for="alergias">Possui alergias? (alimentares ou outras)</label>
-      <textarea id="alergias" name="alergias" placeholder="Descreva se houver"></textarea>
-
-      <label for="acessibilidade">Necessita de acessibilidade especial?</label>
-      <select id="acessibilidade" name="acessibilidade">
-        <option value="" selected>-- Selecione --</option>
-        <option value="Sim">Sim</option>
-        <option value="Não">Não</option>
-      </select>
-
-      <label for="nomeFatura">Nome para Fatura</label>
-      <input type="text" id="nomeFatura" name="nomeFatura" />
-
-      <label for="nuit">NIF / NUIT</label>
-      <input type="text" id="nuit" name="nuit" />
-
-      <label for="enderecoFatura">Endereço para Faturação</label>
-      <textarea id="enderecoFatura" name="enderecoFatura" placeholder="Endereço completo para faturação"></textarea>
-
-      <label for="faturaDigital">Necessita de fatura digital?</label>
-      <select id="faturaDigital" name="faturaDigital">
-        <option value="" selected>-- Selecione --</option>
-        <option value="Sim">Sim</option>
-        <option value="Não">Não</option>
-      </select>
-
-      <label for="conheceu">Como ficou sabendo de nós?</label>
-      <select id="conheceu" name="conheceu">
-        <option value="" selected>-- Selecione --</option>
-        <option value="Redes sociais">Redes sociais</option>
-        <option value="Amigo">Amigo</option>
-        <option value="Google">Google</option>
-        <option value="Outro">Outro</option>
-      </select>
-
-      <label for="observacoes">Comentários ou instruções especiais</label>
-      <textarea id="observacoes" name="observacoes" placeholder="Escreva aqui..."></textarea>
-
-      <label for="pagamento">Forma de Pagamento *</label>
-      <select id="pagamento" name="pagamento" required>
-        <option value="" disabled selected>-- Selecione a forma de pagamento --</option>
-        <option value="M-Pesa">M-Pesa</option>
-        <option value="E-Mola">E-Mola</option>
-        <option value="M-Quesh">M-Quesh</option>
-        <option value="Cartão de Crédito">Cartão de Crédito</option>
-        <option value="Cartão de Débito">Cartão de Débito</option>
-        <option value="Dinheiro">Dinheiro</option>
-        <option value="Transferência Bancária">Transferência Bancária</option>
-        <option value="PayPal">PayPal</option>
-        <option value="Bitcoin">Bitcoin</option>
-        <option value="Ethereum">Ethereum</option>
-        <option value="Outros">Outros</option>
-      </select>
-      <div class="error-msg" id="pagamentoError" aria-live="polite"></div>
-
-      <div class="checkbox-group full-width">
-        <input type="checkbox" id="termos" name="termos" required />
-        <label for="termos">Aceito os <a href="#" target="_blank" rel="noopener noreferrer">termos e condições</a> *</label>
-      </div>
-      <div class="error-msg" id="termosError" aria-live="polite"></div>
-
-      <button type="submit" class="submit-btn full-width">Enviar Reserva</button>
-    </form>
-  </section>
-
-  <section aria-labelledby="consultaTitle" id="consultaStatus">
-    <h2 id="consultaTitle">Consulta de Status da Reserva</h2>
-    <label for="consultaId">Digite seu ID de Reserva:</label>
-    <input type="text" id="consultaId" name="consultaId" placeholder="Ex: ZFG-123ABC" />
-    <button id="btnConsulta" class="submit-btn" style="width: auto; margin-top: 0.5rem;">Consultar</button>
-    <div id="resultadoConsulta" role="alert" aria-live="polite"></div>
-  </section>
-
-  <section id="adminPanel" aria-label="Painel Administrativo">
-    <h2>Painel Administrativo</h2>
-    <div id="adminLogin" role="dialog" aria-modal="true" aria-labelledby="adminLoginLabel">
-      <label for="adminPassword" id="adminLoginLabel">Digite a senha para acessar o painel:</label>
-      <input type="password" id="adminPassword" autocomplete="current-password" />
-      <button id="btnAdminLogin" class="submit-btn" style="width: auto; margin-top: 0.5rem;">Entrar</button>
-      <div id="adminLoginError" role="alert" style="color: #f94144; margin-top: 0.5rem;"></div>
-    </div>
-    <div id="adminContent" style="display:none;">
-      <div id="statusCounters" aria-live="polite" aria-atomic="true">
-        <div class="total">Total: 0</div>
-        <div class="pending">Pendentes: 0</div>
-        <div class="approved">Aprovadas: 0</div>
-        <div class="refused">Recusadas: 0</div>
-      </div>
-      <input type="text" id="searchInput" placeholder="Buscar por ID ou nome..." aria-label="Buscar reservas" />
-      <table aria-describedby="tableDesc">
-        <caption id="tableDesc" style="text-align:left; padding: 0 0 0.5rem 0; font-weight:600; color:#002855;">
-          Lista de Reservas
-        </caption>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Nome</th>
-            <th>Data</th>
-            <th>Serviço</th>
-            <th>Telefone</th>
-            <th>Status</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody id="reservasTableBody">
-          <!-- Linhas serão inseridas via JS -->
-        </tbody>
-      </table>
-      <button id="btnExportCSV" class="submit-btn" style="margin-top:1rem; width:auto;">Exportar CSV</button>
-    </div>
-  </section>
-</main>
-
-<div class="contact-buttons" aria-label="Botões de contato rápido">
-  <a href="https://wa.me/258861450731" target="_blank" rel="noopener noreferrer" aria-label="Atendimento via WhatsApp">💬</a>
-  <a href="tel:+258861450731" class="call-btn" aria-label="Chamada telefônica">📞</a>
+<!-- Splash Screen -->
+<div id="splash" role="alert" aria-live="assertive" aria-atomic="true">
+  ZQ Saúde+<br>
+  <small>Ganhe com o seu conhecimento!</small>
+  <div id="splash-images" aria-hidden="true">
+    <img src="https://img.icons8.com/ios-filled/100/ffffff/heartbeat.png" alt="Ícone batimento cardíaco" />
+    <img src="https://img.icons8.com/ios-filled/100/ffffff/first-aid-kit.png" alt="Ícone kit primeiros socorros" />
+    <img src="https://img.icons8.com/ios-filled/100/ffffff/microscope.png" alt="Ícone microscópio" />
+    <img src="https://img.icons8.com/ios-filled/100/ffffff/pills.png" alt="Ícone pílulas" />
+  </div>
 </div>
 
+<!-- Login / Cadastro -->
+<div class="container" id="loginContainer" role="main" aria-label="Login e Cadastro">
+  <h1>Bem-vindo ao ZQ Saúde+ Quiz</h1>
+  <form id="loginForm" aria-describedby="formDesc" novalidate>
+    <p id="formDesc">Preencha o formulário para jogar e concorrer a prêmios semanais.</p>
+
+    <label for="fullName">Nome Completo *</label>
+    <input type="text" id="fullName" name="fullName" required autocomplete="name" />
+
+    <label for="email">E-mail *</label>
+    <input type="email" id="email" name="email" required autocomplete="email" />
+
+    <label for="password">Senha *</label>
+    <input type="password" id="password" name="password" required autocomplete="current-password" minlength="6" />
+
+    <label for="naturalidade">Naturalidade *</label>
+    <input type="text" id="naturalidade" name="naturalidade" required />
+
+    <label for="localAtual">Localização Atual *</label>
+    <input type="text" id="localAtual" name="localAtual" required />
+
+    <label for="mpesa">M-Pesa (Número para pagamento) *</label>
+    <input type="text" id="mpesa" name="mpesa" pattern="\\d{9,15}" title="Apenas números" required inputmode="numeric" />
+
+    <label for="emola">E-mola (Número para pagamento) *</label>
+    <input type="text" id="emola" name="emola" pattern="\\d{9,15}" title="Apenas números" required inputmode="numeric" />
+
+    <label for="mquesh">M-Quesh (Número para pagamento)</label>
+    <input type="text" id="mquesh" name="mquesh" pattern="\\d{9,15}" title="Apenas números" inputmode="numeric" />
+
+    <label for="paypal">PayPal (E-mail para pagamento)</label>
+    <input type="email" id="paypal" name="paypal" autocomplete="email" />
+
+    <label for="contaBanco">Conta Bancária (Nome do titular e número)</label>
+    <input type="text" id="contaBanco" name="contaBanco" />
+
+    <button type="submit" aria-label="Entrar ou cadastrar-se">Entrar / Cadastrar</button>
+  </form>
+</div>
+
+<!-- Quiz -->
+<div class="container" id="quizContainer" role="main" aria-live="polite" aria-atomic="true" aria-label="Quiz de perguntas de saúde">
+  <div id="question" tabindex="0" aria-live="assertive"></div>
+  <div id="answers"></div>
+  <div id="timerBar" aria-hidden="true"><div id="timerFill"></div></div>
+  <div id="scoreBoard" aria-live="polite" aria-atomic="true" aria-label="Pontuação do jogador">Pontos: 0</div>
+  <button id="btnViewRanking" aria-label="Ver lista dos vencedores">Ver Vencedores</button>
+  <button id="btnLogout" aria-label="Sair do sistema">Sair</button>
+</div>
+
+<!-- Ranking -->
+<div class="container" id="rankingContainer" aria-label="Lista dos maiores pontos">
+  <h2>Top 10 Jogadores da Semana</h2>
+  <ul id="rankingList" role="list"></ul>
+  <button id="btnBackToQuiz" aria-label="Voltar para o quiz">Voltar ao Quiz</button>
+</div>
+
+<!-- Admin -->
+<div class="container" id="adminArea" aria-label="Área administrativa">
+  <h2>Área do Administrador</h2>
+  <div id="adminButtons">
+    <button id="btnResetRanking" aria-label="Zerar pontos e ranking">Zerar Ranking</button>
+    <button id="btnViewUsers" aria-label="Ver usuários cadastrados">Ver Usuários</button>
+    <button id="btnLogoutAdmin" aria-label="Sair da área administrativa">Sair Admin</button>
+  </div>
+  <div id="adminUsersList" style="max-height:300px; overflow:auto; margin-top:12px;"></div>
+</div>
+
+<!-- Banner de anúncios fixo no Quiz -->
+<div id="adBanner" aria-label="Anúncio publicitário" role="region">
+  <!-- Aqui você deve inserir seu código real do Google AdSense -->
+  <span>Anúncios Google AdSense - Ganhe enquanto joga!</span>
+</div>
+
+<!-- Áudio do Timer -->
+<audio id="audioTick" src="https://actions.google.com/sounds/v1/alarms/clock_tick.ogg" preload="auto"></audio>
+
 <script>
-  // Atualiza max data nascimento para hoje
-  document.getElementById('dataNascimento').max = new Date().toISOString().split('T')[0];
+(() => {
+  // Configurações e variáveis
+  const STORAGE_USERS = "zqsaude_users";
+  const ADMIN_EMAIL = "admin@zqsaude.com";
+  const ADMIN_PASS = "ZefraQuiz+";
+  const TIMER_SECONDS = 15;
+  const MIN_POINTS_FOR_PRIZE = 10; // Pontos mínimos para aparecer no ranking
+  const MAX_TOP_PLAYERS = 10;
 
-  // Modo escuro/claro toggle
-  const modeToggle = document.querySelector('.mode-toggle');
-  modeToggle.addEventListener('click', () => {
-    const body = document.body;
-    body.classList.toggle('dark-mode');
-    modeToggle.textContent = body.classList.contains('dark-mode') ? '☀️' : '🌙';
-    modeToggle.setAttribute('aria-pressed', body.classList.contains('dark-mode'));
-  });
+  let users = [];
+  let currentUser = null;
 
-  // Formulário e validação
-  const form = document.getElementById('reservationForm');
-  form.addEventListener('submit', e => {
-    e.preventDefault();
-    clearErrors();
-
-    let valid = true;
-
-    function setError(id, msg) {
-      valid = false;
-      const el = document.getElementById(id + 'Error');
-      if (el) el.textContent = msg;
-    }
-
-    const nome = form.nome.value.trim();
-    if (nome.length < 3) setError('nome', 'Nome deve ter ao menos 3 caracteres.');
-
-    const email = form.email.value.trim();
-    if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) setError('email', 'Email inválido.');
-
-    const telefone = form.telefone.value.trim();
-    if (!telefone.match(/^\+?\d{8,15}$/)) setError('telefone', 'Telefone inválido.');
-
-    const bi = form.bi.value.trim();
-    if (bi.length < 7 || bi.length > 14) setError('bi', 'Número BI inválido.');
-
-    if (!form.data.value) setError('data', 'Data da reserva é obrigatória.');
-
-    if (!form.servico.value) setError('servico', 'Selecione um serviço.');
-
-    const numAdultos = parseInt(form.numAdultos.value, 10);
-    if (isNaN(numAdultos) || numAdultos < 1) setError('numAdultos', 'Informe o número de adultos.');
-
-    if (!form.pagamento.value) setError('pagamento', 'Selecione a forma de pagamento.');
-
-    if (!form.termos.checked) setError('termos', 'Você deve aceitar os termos.');
-
-    if (!valid) return;
-
-    // Gera ID da reserva
-    const reservaId = generateReservaID();
-
-    // Cria objeto reserva
-    const reserva = {
-      id: reservaId,
-      nome,
-      email,
-      telefone,
-      bi,
-      nacionalidade: form.nacionalidade.value.trim(),
-      genero: form.genero.value,
-      dataNascimento: form.dataNascimento.value,
-      nomeAcompanhante: form.nomeAcompanhante.value.trim(),
-      data: form.data.value,
-      servico: form.servico.value,
-      numAdultos,
-      numCriancas: form.numCriancas.value || 0,
-      numNoites: form.numNoites.value || 0,
-      horaSaida: form.horaSaida.value,
-      motivoReserva: form.motivoReserva.value,
-      alergias: form.alergias.value.trim(),
-      acessibilidade: form.acessibilidade.value,
-      nomeFatura: form.nomeFatura.value.trim(),
-      nuit: form.nuit.value.trim(),
-      enderecoFatura: form.enderecoFatura.value.trim(),
-      faturaDigital: form.faturaDigital.value,
-      conheceu: form.conheceu.value,
-      observacoes: form.observacoes.value.trim(),
-      pagamento: form.pagamento.value,
-      status: 'Pendente',
-      telefone: telefone
-    };
-
-    saveReserva(reserva);
-
-    alert(`Reserva enviada com sucesso! Seu ID de reserva é: ${reservaId}`);
-
-    form.reset();
-  });
-
-  function clearErrors() {
-    const errors = document.querySelectorAll('.error-msg');
-    errors.forEach(e => e.textContent = '');
+  // Perguntas simuladas (1000 perguntas simples exemplo)
+  const questions = [];
+  for(let i=1; i<=1000; i++) {
+    questions.push({
+      question: `Pergunta ${i}: Qual a função do coração?`,
+      options: [
+        "Bombear sangue",
+        "Filtrar sangue",
+        "Produzir hormônios",
+        "Armazenar energia"
+      ],
+      correctAnswer: "Bombear sangue"
+    });
   }
 
-  function generateReservaID() {
-    // Formato ZFG-XXXXXX (6 letras/números aleatórios)
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    let code = '';
-    for (let i = 0; i < 6; i++) {
-      code += chars.charAt(Math.floor(Math.random() * chars.length));
+  // Estado quiz
+  let questionOrder = [];
+  let questionIndex = 0;
+  let timerInterval = null;
+  let timeLeft = TIMER_SECONDS;
+  let audioTick = document.getElementById("audioTick");
+
+  // Elementos DOM
+  const splashEl = document.getElementById("splash");
+  const loginContainer = document.getElementById("loginContainer");
+  const loginForm = document.getElementById("loginForm");
+  const quizContainer = document.getElementById("quizContainer");
+  const questionEl = document.getElementById("question");
+  const answersEl = document.getElementById("answers");
+  const timerFill = document.getElementById("timerFill");
+  const scoreBoard = document.getElementById("scoreBoard");
+  const btnLogout = document.getElementById("btnLogout");
+  const btnViewRanking = document.getElementById("btnViewRanking");
+  const rankingContainer = document.getElementById("rankingContainer");
+  const rankingList = document.getElementById("rankingList");
+  const btnBackToQuiz = document.getElementById("btnBackToQuiz");
+  const adminArea = document.getElementById("adminArea");
+  const btnResetRanking = document.getElementById("btnResetRanking");
+  const btnViewUsers = document.getElementById("btnViewUsers");
+  const adminUsersList = document.getElementById("adminUsersList");
+  const btnLogoutAdmin = document.getElementById("btnLogoutAdmin");
+  const adBanner = document.getElementById("adBanner");
+
+  // Funções utilitárias
+  function getUsers() {
+    const stored = localStorage.getItem(STORAGE_USERS);
+    return stored ? JSON.parse(stored) : [];
+  }
+  function saveUsers() {
+    localStorage.setItem(STORAGE_USERS, JSON.stringify(users));
+  }
+  function shuffleArray(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
     }
-    return 'ZFG-' + code;
   }
 
-  // Usar localStorage para guardar reservas (simulação)
-  function saveReserva(reserva) {
-    const reservas = JSON.parse(localStorage.getItem('reservas') || '[]');
-    reservas.push(reserva);
-    localStorage.setItem('reservas', JSON.stringify(reservas));
+  // Inicializa
+  function init() {
+    users = getUsers();
+    questionOrder = [...questions];
+    shuffleArray(questionOrder);
+
+    setTimeout(() => {
+      splashEl.style.display = "none";
+      showLogin();
+    }, 3500);
   }
 
-  // Consulta de status pelo cliente
-  const btnConsulta = document.getElementById('btnConsulta');
-  btnConsulta.addEventListener('click', () => {
-    const idBusca = document.getElementById('consultaId').value.trim().toUpperCase();
-    const resultado = document.getElementById('resultadoConsulta');
-    if (!idBusca) {
-      resultado.textContent = 'Por favor, insira um ID válido.';
-      return;
-    }
-    const reservas = JSON.parse(localStorage.getItem('reservas') || '[]');
-    const reserva = reservas.find(r => r.id === idBusca);
-    if (!reserva) {
-      resultado.textContent = 'Reserva não encontrada.';
-      return;
-    }
-    resultado.innerHTML = `
-      <p><strong>ID:</strong> ${reserva.id}</p>
-      <p><strong>Nome:</strong> ${reserva.nome}</p>
-      <p><strong>Serviço:</strong> ${reserva.servico}</p>
-      <p><strong>Data:</strong> ${reserva.data}</p>
-      <p><strong>Status:</strong> <span class="badge ${reserva.status.toLowerCase()}">${reserva.status}</span></p>
-    `;
-  });
-
-  // Painel administrativo
-  const fSpot = document.querySelector('.f-spot');
-  const adminPanel = document.getElementById('adminPanel');
-  const adminLogin = document.getElementById('adminLogin');
-  const adminContent = document.getElementById('adminContent');
-  const adminPasswordInput = document.getElementById('adminPassword');
-  const btnAdminLogin = document.getElementById('btnAdminLogin');
-  const adminLoginError = document.getElementById('adminLoginError');
-  const reservasTableBody = document.getElementById('reservasTableBody');
-  const searchInput = document.getElementById('searchInput');
-  const statusCounters = document.getElementById('statusCounters');
-  const btnExportCSV = document.getElementById('btnExportCSV');
-
-  let isAdminLoggedIn = false;
-  const ADMIN_PASSWORD = '825399386';
-
-  function showAdminPanel() {
-    adminPanel.style.display = 'block';
-    adminLogin.style.display = 'flex';
-    adminLoginError.textContent = '';
-    adminPasswordInput.value = '';
-    adminPasswordInput.focus();
-    adminContent.style.display = 'none';
+  // Mostrar tela login
+  function showLogin() {
+    loginContainer.style.display = "block";
+    quizContainer.style.display = "none";
+    rankingContainer.style.display = "none";
+    adminArea.style.display = "none";
+    adBanner.style.display = "none";
   }
 
-  fSpot.addEventListener('click', () => {
-    if (!isAdminLoggedIn) {
-      showAdminPanel();
-    }
-  });
-  fSpot.addEventListener('keydown', e => {
-    if ((e.key === 'Enter' || e.key === ' ') && !isAdminLoggedIn) {
-      e.preventDefault();
-      showAdminPanel();
-    }
-  });
+  // Mostrar quiz
+  function showQuiz() {
+    loginContainer.style.display = "none";
+    quizContainer.style.display = "flex";
+    rankingContainer.style.display = "none";
+    adminArea.style.display = "none";
+    adBanner.style.display = "block";
+    displayQuestion();
+    updateScore();
+  }
 
-  btnAdminLogin.addEventListener('click', () => {
-    if (adminPasswordInput.value === ADMIN_PASSWORD) {
-      isAdminLoggedIn = true;
-      adminLogin.style.display = 'none';
-      adminContent.style.display = 'flex';
-      loadReservasTable();
-      updateCounters();
+  // Mostrar ranking
+  function showRanking() {
+    loginContainer.style.display = "none";
+    quizContainer.style.display = "none";
+    rankingContainer.style.display = "block";
+    adminArea.style.display = "none";
+    adBanner.style.display = "none";
+    updateRanking();
+  }
+
+  // Mostrar admin
+  function showAdmin() {
+    loginContainer.style.display = "none";
+    quizContainer.style.display = "none";
+    rankingContainer.style.display = "none";
+    adminArea.style.display = "block";
+    adBanner.style.display = "none";
+    renderUsersTable();
+  }
+
+  // Mostrar questão atual
+  function displayQuestion() {
+    if (questionIndex >= questionOrder.length) {
+      shuffleArray(questionOrder);
+      questionIndex = 0;
+    }
+    const current = questionOrder[questionIndex];
+    questionEl.textContent = current.question;
+    answersEl.innerHTML = "";
+    current.options.forEach((opt) => {
+      const btn = document.createElement("button");
+      btn.className = "answerBtn";
+      btn.textContent = opt;
+      btn.setAttribute("aria-label", `Responder: ${opt}`);
+      btn.onclick = () => answerQuestion(opt);
+      answersEl.appendChild(btn);
+    });
+    startTimer();
+  }
+
+  // Começa o timer
+  function startTimer() {
+    timeLeft = TIMER_SECONDS;
+    timerFill.style.width = "100%";
+    clearInterval(timerInterval);
+    playTickSound();
+    timerInterval = setInterval(() => {
+      timeLeft--;
+      timerFill.style.width = (timeLeft / TIMER_SECONDS) * 100 + "%";
+      playTickSound();
+      if (timeLeft <= 0) {
+        clearInterval(timerInterval);
+        answerQuestion(null); // tempo acabou, nenhuma resposta
+      }
+    }, 1000);
+  }
+
+  // Tocar som do tic tac
+  function playTickSound() {
+    // Para evitar sobreposição do som:
+    audioTick.pause();
+    audioTick.currentTime = 0;
+    audioTick.play().catch(() => {});
+  }
+
+  // Responder questão
+  function answerQuestion(selected) {
+    clearInterval(timerInterval);
+    const current = questionOrder[questionIndex];
+    if (selected === current.correctAnswer) {
+      currentUser.points += 10;
     } else {
-      adminLoginError.textContent = 'Senha incorreta.';
-      adminPasswordInput.focus();
+      currentUser.points = Math.max(0, currentUser.points - 5);
     }
-  });
+    updateScore();
+    questionIndex++;
+    saveUsers();
+    displayQuestion();
+  }
 
-  // Filtra reservas conforme busca
-  searchInput.addEventListener('input', () => {
-    loadReservasTable(searchInput.value.trim());
-  });
+  // Atualiza placar
+  function updateScore() {
+    scoreBoard.textContent = `Pontos: ${currentUser.points}`;
+  }
 
-  function loadReservasTable(filter = '') {
-    const reservas = JSON.parse(localStorage.getItem('reservas') || '[]');
-    let filtradas = reservas;
-    if (filter) {
-      const f = filter.toLowerCase();
-      filtradas = reservas.filter(r => r.id.toLowerCase().includes(f) || r.nome.toLowerCase().includes(f));
-    }
-    reservasTableBody.innerHTML = '';
-
-    if (filtradas.length === 0) {
-      reservasTableBody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Nenhuma reserva encontrada.</td></tr>';
-      return;
-    }
-
-    filtradas.forEach(reserva => {
-      const tr = document.createElement('tr');
-
-      const tdId = document.createElement('td');
-      tdId.textContent = reserva.id;
-      tr.appendChild(tdId);
-
-      const tdNome = document.createElement('td');
-      tdNome.textContent = reserva.nome;
-      tr.appendChild(tdNome);
-
-      const tdData = document.createElement('td');
-      tdData.textContent = reserva.data;
-      tr.appendChild(tdData);
-
-      const tdServico = document.createElement('td');
-      tdServico.textContent = reserva.servico;
-      tr.appendChild(tdServico);
-
-      const tdTelefone = document.createElement('td');
-      tdTelefone.textContent = reserva.telefone;
-      tr.appendChild(tdTelefone);
-
-      const tdStatus = document.createElement('td');
-      const spanStatus = document.createElement('span');
-      spanStatus.textContent = reserva.status;
-      spanStatus.className = 'badge ' + reserva.status.toLowerCase();
-      tdStatus.appendChild(spanStatus);
-      tr.appendChild(tdStatus);
-
-      const tdActions = document.createElement('td');
-
-      // Aprovar
-      const btnApprove = document.createElement('button');
-      btnApprove.className = 'btn-small tooltip';
-      btnApprove.innerHTML = '✔';
-      btnApprove.setAttribute('aria-label', 'Aprovar reserva');
-      btnApprove.setAttribute('data-tooltip', 'Aprovar');
-      btnApprove.addEventListener('click', () => {
-        updateReservaStatus(reserva.id, 'Aprovado');
-      });
-      tdActions.appendChild(btnApprove);
-
-      // Recusar
-      const btnRefuse = document.createElement('button');
-      btnRefuse.className = 'btn-small tooltip';
-      btnRefuse.innerHTML = '✖';
-      btnRefuse.setAttribute('aria-label', 'Recusar reserva');
-      btnRefuse.setAttribute('data-tooltip', 'Recusar');
-      btnRefuse.addEventListener('click', () => {
-        updateReservaStatus(reserva.id, 'Recusado');
-      });
-      tdActions.appendChild(btnRefuse);
-
-      // Excluir
-      const btnDelete = document.createElement('button');
-      btnDelete.className = 'btn-small tooltip';
-      btnDelete.innerHTML =
-      '🗑';
-      btnDelete.setAttribute('aria-label', 'Excluir reserva');
-      btnDelete.setAttribute('data-tooltip', 'Excluir');
-      btnDelete.addEventListener('click', () => {
-        if (confirm(`Tem certeza que deseja excluir a reserva ${reserva.id}?`)) {
-          deleteReserva(reserva.id);
-        }
-      });
-      tdActions.appendChild(btnDelete);
-
-      tr.appendChild(tdActions);
-
-      reservasTableBody.appendChild(tr);
+  // Atualiza ranking
+  function updateRanking() {
+    const topUsers = users
+      .filter(u => u.points >= MIN_POINTS_FOR_PRIZE)
+      .sort((a,b) => b.points - a.points)
+      .slice(0, MAX_TOP_PLAYERS);
+    rankingList.innerHTML = "";
+    topUsers.forEach((u,i) => {
+      const li = document.createElement("li");
+      li.textContent = `${i+1}. ${u.fullName} — ${u.points} pontos`;
+      rankingList.appendChild(li);
     });
   }
 
-  function updateReservaStatus(id, novoStatus) {
-    const reservas = JSON.parse(localStorage.getItem('reservas') || '[]');
-    const idx = reservas.findIndex(r => r.id === id);
-    if (idx !== -1) {
-      reservas[idx].status = novoStatus === 'Aprovado' ? 'Aprovado' : (novoStatus === 'Recusado' ? 'Recusado' : 'Pendente');
-      localStorage.setItem('reservas', JSON.stringify(reservas));
-      loadReservasTable(searchInput.value.trim());
-      updateCounters();
-    }
-  }
-
-  function deleteReserva(id) {
-    let reservas = JSON.parse(localStorage.getItem('reservas') || '[]');
-    reservas = reservas.filter(r => r.id !== id);
-    localStorage.setItem('reservas', JSON.stringify(reservas));
-    loadReservasTable(searchInput.value.trim());
-    updateCounters();
-  }
-
-  function updateCounters() {
-    const reservas = JSON.parse(localStorage.getItem('reservas') || '[]');
-    const total = reservas.length;
-    const pendentes = reservas.filter(r => r.status === 'Pendente').length;
-    const aprovadas = reservas.filter(r => r.status === 'Aprovado').length;
-    const recusadas = reservas.filter(r => r.status === 'Recusado').length;
-
-    statusCounters.querySelector('.total').textContent = `Total: ${total}`;
-    statusCounters.querySelector('.pending').textContent = `Pendentes: ${pendentes}`;
-    statusCounters.querySelector('.approved').textContent = `Aprovadas: ${aprovadas}`;
-    statusCounters.querySelector('.refused').textContent = `Recusadas: ${recusadas}`;
-  }
-
-  // Exportar CSV
-  btnExportCSV.addEventListener('click', () => {
-    const reservas = JSON.parse(localStorage.getItem('reservas') || '[]');
-    if (reservas.length === 0) {
-      alert('Nenhuma reserva para exportar.');
+  // Renderiza tabela usuários admin
+  function renderUsersTable() {
+    if (users.length === 0) {
+      adminUsersList.innerHTML = "<p>Nenhum usuário cadastrado.</p>";
       return;
     }
-    const csvRows = [];
-    const headers = ['ID', 'Nome', 'Email', 'Telefone', 'BI', 'Nacionalidade', 'Gênero', 'Data Nascimento', 'Acompanhante', 'Data Reserva', 'Serviço', 'Adultos', 'Crianças', 'Noites', 'Hora Saída', 'Motivo', 'Alergias', 'Acessibilidade', 'Nome Fatura', 'NUIT', 'Endereço Fatura', 'Fatura Digital', 'Como Conheceu', 'Observações', 'Pagamento', 'Status'];
-    csvRows.push(headers.join(';'));
-
-    reservas.forEach(r => {
-      const row = [
-        r.id,
-        r.nome,
-        r.email,
-        r.telefone,
-        r.bi,
-        r.nacionalidade,
-        r.genero,
-        r.dataNascimento,
-        r.nomeAcompanhante,
-        r.data,
-        r.servico,
-        r.numAdultos,
-        r.numCriancas,
-        r.numNoites,
-        r.horaSaida,
-        r.motivoReserva,
-        r.alergias ? `"${r.alergias.replace(/"/g, '""')}"` : '',
-        r.acessibilidade,
-        r.nomeFatura,
-        r.nuit,
-        r.enderecoFatura ? `"${r.enderecoFatura.replace(/"/g, '""')}"` : '',
-        r.faturaDigital,
-        r.conheceu,
-        r.observacoes ? `"${r.observacoes.replace(/"/g, '""')}"` : '',
-        r.pagamento,
-        r.status
-      ];
-      csvRows.push(row.join(';'));
+    let html = `<table aria-label="Tabela de usuários"><thead>
+      <tr><th>Nome</th><th>Email</th><th>Pontos</th><th>Naturalidade</th><th>Localização</th>
+      <th>M-Pesa</th><th>E-mola</th><th>M-Quesh</th><th>PayPal</th><th>Conta Bancária</th></tr></thead><tbody>`;
+    users.forEach(u => {
+    html += `<tr>
+        <td>${u.fullName}</td>
+        <td>${u.email}</td>
+        <td>${u.points}</td>
+        <td>${u.naturalidade || ''}</td>
+        <td>${u.localAtual || ''}</td>
+        <td>${u.mpesa || ''}</td>
+        <td>${u.emola || ''}</td>
+        <td>${u.mquesh || ''}</td>
+        <td>${u.paypal || ''}</td>
+        <td>${u.contaBanco || ''}</td>
+      </tr>`;
     });
+    html += "</tbody></table>";
+    adminUsersList.innerHTML = html;
+  }
 
-    const csvContent = csvRows.join('\n');
-    const blob = new Blob([csvContent], {type: 'text/csv;charset=utf-8;'});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'reservas_zefraeva.csv';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+  // Logout geral
+  function logout() {
+    currentUser = null;
+    questionIndex = 0;
+    clearInterval(timerInterval);
+    showLogin();
+  }
+
+  // Reset ranking
+  function resetRanking() {
+    if (!confirm("Confirma zerar todos os pontos e ranking?")) return;
+    users.forEach(u => u.points = 0);
+    saveUsers();
+    alert("Ranking zerado com sucesso!");
+    renderUsersTable();
+  }
+
+  // Login ou cadastro
+  loginForm.addEventListener("submit", e => {
+    e.preventDefault();
+    const f = loginForm;
+    const fullName = f.fullName.value.trim();
+    const email = f.email.value.trim().toLowerCase();
+    const password = f.password.value.trim();
+    const naturalidade = f.naturalidade.value.trim();
+    const localAtual = f.localAtual.value.trim();
+    const mpesa = f.mpesa.value.trim();
+    const emola = f.emola.value.trim();
+    const mquesh = f.mquesh.value.trim();
+    const paypal = f.paypal.value.trim();
+    const contaBanco = f.contaBanco.value.trim();
+
+    if (!fullName || !email || !password) {
+      alert("Nome, e-mail e senha são obrigatórios.");
+      return;
+    }
+
+    // Login admin especial
+    if (email === ADMIN_EMAIL && password === ADMIN_PASS) {
+      currentUser = { email: ADMIN_EMAIL, fullName: "Administrador", points: 0 };
+      showAdmin();
+      return;
+    }
+
+    // Procurar usuário
+    let user = users.find(u => u.email === email);
+    if (user) {
+      // Já existe - validar senha
+      if (user.password !== password) {
+        alert("Senha incorreta.");
+        return;
+      }
+      currentUser = user;
+    } else {
+      // Criar novo usuário
+      user = {
+        fullName, email, password,
+        naturalidade, localAtual,
+        mpesa, emola, mquesh, paypal, contaBanco,
+        points: 0
+      };
+      users.push(user);
+      saveUsers();
+      currentUser = user;
+      alert("Cadastro realizado com sucesso! Bem-vindo(a)!");
+    }
+    showQuiz();
   });
+
+  // Botões quiz
+  btnLogout.onclick = logout;
+  btnViewRanking.onclick = showRanking;
+  btnBackToQuiz.onclick = showQuiz;
+
+  // Botões admin
+  btnLogoutAdmin.onclick = logout;
+  btnResetRanking.onclick = resetRanking;
+  btnViewUsers.onclick = renderUsersTable;
+
+  // Inicializa o app
+  init();
+
+})();
 </script>
+
 </body>
 </html>
