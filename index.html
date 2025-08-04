@@ -5,311 +5,369 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>ZQ Saúde+ Quiz</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+  /* Fonte semelhante à San Francisco (Apple) */
+  @import url('https://fonts.googleapis.com/css2?family=SF+Pro+Text:wght@400;600&display=swap');
 
+  /* Reset básico */
+  * {
+    box-sizing: border-box;
+  }
   body {
-    margin:0; padding:0;
-    font-family: 'Roboto', sans-serif;
-    background: #f0f4f8;
-    color: #10375c;
+    margin: 0; padding: 0;
+    font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+      Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    background: #f5f7fa;
+    color: #1c1c1e;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
+  }
+  h1, h2, h3 {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 1rem;
   }
 
-  /* Splash Screen */
+  /* Container principal */
+  .container {
+    max-width: 420px;
+    width: 100%;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    padding: 24px 32px;
+    margin: 2rem 1rem;
+    animation: fadeInUp 0.6s ease forwards;
+  }
+
+  /* Inputs e botões */
+  label {
+    display: block;
+    margin-top: 16px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #34495e;
+  }
+  input {
+    width: 100%;
+    padding: 12px 16px;
+    margin-top: 6px;
+    border: 1.5px solid #d1d5db;
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+    font-family: inherit;
+    color: #1c1c1e;
+    background: #fefefe;
+  }
+  input:focus {
+    outline: none;
+    border-color: #4cd964; /* verde suave Apple */
+    box-shadow: 0 0 6px #a5d6a7;
+  }
+
+  button {
+    margin-top: 28px;
+    background-color: #4cd964;
+    border: none;
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.1rem;
+    padding: 14px 0;
+    width: 100%;
+    border-radius: 18px;
+    cursor: pointer;
+    transition: background-color 0.25s ease;
+    font-family: inherit;
+    box-shadow: 0 4px 8px rgba(76, 217, 100, 0.4);
+  }
+  button:hover, button:focus {
+    background-color: #43c759;
+    box-shadow: 0 6px 12px rgba(67, 199, 89, 0.6);
+  }
+
+  /* Splash */
   #splash {
     position: fixed;
-    top:0; left:0; right:0; bottom:0;
-    background: #104e8b;
-    color: #cce7ff;
+    inset: 0;
+    background: #ffffff;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    font-size: 3rem;
-    font-weight: 700;
-    text-align: center;
     z-index: 9999;
-    user-select: none;
+    opacity: 1;
+    animation: splashFadeOut 0.8s ease forwards;
+    animation-delay: 3.5s;
   }
-  #splash small {
-    font-size: 1.2rem;
-    margin-top: 0.6rem;
-    font-weight: 400;
-  }
-  /* Subtítulo animação com imagens (simples) */
-  #splash-images {
-    display: flex;
-    margin-top: 1rem;
-    gap: 15px;
-  }
-  #splash-images img {
-    width: 60px;
-    height: 60px;
-    filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.2));
-    animation: bounce 2s infinite alternate;
-  }
-  #splash-images img:nth-child(2) { animation-delay: 0.3s; }
-  #splash-images img:nth-child(3) { animation-delay: 0.6s; }
-  #splash-images img:nth-child(4) { animation-delay: 0.9s; }
-
-  @keyframes bounce {
-    from { transform: translateY(0); }
-    to { transform: translateY(-15px); }
-  }
-
-  /* Containers */
-  .container {
-    background: #fff;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
-    border-radius: 12px;
-    max-width: 480px;
-    width: 90%;
-    margin: 2rem auto;
-    padding: 20px 30px;
-  }
-
-  /* Formulário Login */
-  label {
-    display: block;
-    margin-top: 15px;
-    font-weight: 600;
-    color: #10375c;
-  }
-  input {
-    width: 100%;
-    padding: 10px;
-    margin-top: 6px;
-    border: 1.8px solid #10375c;
-    border-radius: 8px;
-    font-size: 1rem;
-    color: #10375c;
-    background: #f5faff;
-  }
-  input:focus {
-    outline: none;
-    border-color: #4a90e2;
-    box-shadow: 0 0 6px #4a90e2;
-  }
-  button {
-    margin-top: 20px;
-    background: #10375c;
-    color: #cce7ff;
-    border: none;
-    border-radius: 10px;
-    padding: 14px;
-    font-size: 1.2rem;
-    cursor: pointer;
+  #splash h1 {
+    font-size: 3.5rem;
+    color: #4cd964;
+    margin: 0;
     font-weight: 700;
-    transition: background-color 0.3s ease;
-    width: 100%;
   }
-  button:hover {
-    background: #0a2c4e;
+  #splash p {
+    margin-top: 0.5rem;
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: #34495e;
+    max-width: 320px;
+    text-align: center;
+  }
+  #splash .icons {
+    display: flex;
+    gap: 40px;
+    margin-top: 2rem;
+  }
+  #splash svg {
+    width: 72px;
+    height: 72px;
+    fill: #4cd964;
+    opacity: 0.7;
+    animation: float 3s ease-in-out infinite;
+  }
+  #splash svg:nth-child(2) {
+    animation-delay: 1s;
+  }
+  #splash svg:nth-child(3) {
+    animation-delay: 2s;
+  }
+
+  /* Animações */
+  @keyframes splashFadeOut {
+    to { opacity: 0; visibility: hidden; pointer-events: none; }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0);}
+    50% { transform: translateY(-15px);}
+  }
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(15px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   /* Quiz */
   #quizContainer {
-    display: none;
+    display: flex;
     flex-direction: column;
+    gap: 16px;
   }
   #question {
-    font-size: 1.3rem;
+    font-size: 1.25rem;
     font-weight: 600;
-    margin-bottom: 20px;
-    min-height: 70px;
+    color: #2c3e50;
+    min-height: 80px;
   }
   #answers {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 12px;
+    gap: 14px;
   }
   button.answerBtn {
-    background: #d1e8ff;
-    border: 2px solid #10375c;
-    border-radius: 10px;
-    padding: 12px;
+    background: #e9f7ef;
+    border: 2px solid #b6e5c3;
+    border-radius: 18px;
+    padding: 14px;
     font-weight: 600;
+    font-size: 1rem;
+    color: #2c3e50;
     cursor: pointer;
-    transition: background-color 0.25s ease;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    box-shadow: 0 4px 8px rgba(180, 230, 190, 0.4);
   }
   button.answerBtn:hover, button.answerBtn:focus {
-    background-color: #10375c;
-    color: #cce7ff;
+    background-color: #c6f1bc;
+    border-color: #7bd77a;
     outline: none;
   }
 
-  /* Timer Bar */
   #timerBar {
-    height: 15px;
+    height: 10px;
     width: 100%;
-    background: #e3f0ff;
+    background: #d1d5db;
     border-radius: 10px;
     overflow: hidden;
-    margin-top: 20px;
-    box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
   }
   #timerFill {
-    height: 100%;
     width: 100%;
-    background: #10375c;
+    height: 100%;
+    background: #4cd964;
     transition: width 1s linear;
   }
 
-  /* Score */
   #scoreBoard {
-    margin-top: 18px;
     font-weight: 700;
-    font-size: 1.1rem;
-    color: #10375c;
+    font-size: 1.2rem;
+    color: #2c3e50;
     text-align: center;
   }
 
   /* Botões adicionais */
   #btnViewRanking, #btnLogout {
-    margin-top: 20px;
-    background: #4a90e2;
-    border-radius: 10px;
-    padding: 12px;
-    font-weight: 700;
-    font-size: 1.1rem;
-    color: white;
+    background: transparent;
+    color: #4cd964;
+    font-weight: 600;
+    font-size: 1rem;
     border: none;
+    margin-top: 12px;
     cursor: pointer;
-    width: 100%;
+    transition: color 0.3s ease;
   }
-  #btnViewRanking:hover, #btnLogout:hover {
-    background: #357ABD;
+  #btnViewRanking:hover, #btnLogout:hover,
+  #btnViewRanking:focus, #btnLogout:focus {
+    color: #32b75d;
+    outline: none;
   }
 
   /* Ranking */
-  #rankingContainer {
-    display: none;
+  #rankingContainer h2 {
+    margin-bottom: 24px;
   }
   #rankingList {
     list-style: decimal inside;
-    font-size: 1.2rem;
-    padding-left: 10px;
-    margin-bottom: 20px;
+    font-size: 1.1rem;
+    color: #34495e;
+    padding-left: 12px;
+    margin-bottom: 24px;
   }
   #rankingList li {
-    margin-bottom: 8px;
-    font-weight: 600;
-    color: #10375c;
+    margin-bottom: 12px;
+    padding: 8px 16px;
+    background: #f0f5f1;
+    border-radius: 14px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
   }
   #btnBackToQuiz {
-    background: #4a90e2;
-    border-radius: 10px;
-    border: none;
-    padding: 12px;
+    background: #4cd964;
+    color: white;
     font-weight: 700;
     font-size: 1.1rem;
-    color: white;
-    cursor: pointer;
+    padding: 12px 0;
     width: 100%;
+    border-radius: 18px;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 4px 10px rgba(76, 217, 100, 0.6);
+    transition: background-color 0.25s ease;
   }
-  #btnBackToQuiz:hover {
-    background: #357ABD;
+  #btnBackToQuiz:hover, #btnBackToQuiz:focus {
+    background-color: #3bb952;
+    outline: none;
   }
 
-  /* Admin area - visible only on desktop */
-  @media (max-width: 850px) {
-    #adminArea {
-      display: none !important;
-    }
-  }
-  #adminArea {
-    display: none;
-    max-width: 900px;
-    margin: 2rem auto;
-    background: #cce7ff;
-    border-radius: 15px;
-    padding: 20px 30px;
-    box-shadow: 0 5px 25px rgba(0,0,0,0.2);
-  }
+  /* Admin */
   #adminArea h2 {
-    color: #10375c;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
   }
   #adminUsersList {
-    max-height: 320px;
+    max-height: 280px;
     overflow-y: auto;
-    border: 2px solid #10375c;
-    border-radius: 10px;
+    background: #fefefe;
+    border: 1px solid #d1d5db;
+    border-radius: 16px;
     padding: 12px;
-    background: #e8f3ff;
-    color: #10375c;
-    font-size: 0.9rem;
   }
   #adminUsersList table {
     width: 100%;
     border-collapse: collapse;
   }
   #adminUsersList th, #adminUsersList td {
-    border: 1px solid #10375c;
     padding: 8px 10px;
-    text-align: left;
+    border-bottom: 1px solid #e0e4e8;
+    font-size: 0.9rem;
+    color: #34495e;
   }
   #adminUsersList th {
-    background-color: #357ABD;
-    color: #fff;
-  }
-  #adminButtons {
-    margin-top: 20px;
-    display: flex;
-    gap: 15px;
-    flex-wrap: wrap;
-  }
-  #adminButtons button {
-    flex: 1 1 200px;
-    background: #10375c;
-    color: #cce7ff;
-    border: none;
-    border-radius: 12px;
-    padding: 12px;
+    background: #e6f4e8;
     font-weight: 700;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
   }
-  #adminButtons button:hover {
-    background: #0a2c4e;
+  .admin-btn {
+    background: #4cd964;
+    border: none;
+    color: white;
+    font-weight: 600;
+    padding: 10px 18px;
+    margin-right: 14px;
+    border-radius: 18px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(76, 217, 100, 0.6);
+    transition: background-color 0.25s ease;
+    font-size: 1rem;
+  }
+  .admin-btn:hover, .admin-btn:focus {
+    background-color: #3bb952;
+    outline: none;
   }
 
-  /* Fixed ad banner */
+  /* Ad Banner */
   #adBanner {
     position: fixed;
-    bottom: 0; left: 0; right: 0;
-    background: #104e8b;
-    color: #cce7ff;
-    font-weight: 700;
-    font-family: 'Roboto', sans-serif;
-    padding: 10px 0;
+    bottom: 0;
+    left: 0; right: 0;
+    background: #e9f7ef;
+    color: #2c3e50;
+    font-weight: 600;
+    font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+      Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     text-align: center;
+    padding: 10px;
+    box-shadow: 0 -2px 6px rgba(0,0,0,0.05);
     user-select: none;
-    z-index: 10000;
+    font-size: 1rem;
+  }
+
+  /* Oculto */
+  .hidden {
+    display: none !important;
+  }
+
+  /* Responsivo */
+  @media (max-width: 480px) {
+    .container {
+      margin: 1rem;
+      padding: 16px 24px;
+    }
+    #splash h1 {
+      font-size: 2.8rem;
+    }
+    #splash p {
+      font-size: 1.1rem;
+      max-width: 280px;
+    }
   }
 </style>
 </head>
 <body>
 
-<!-- Splash Screen -->
+<!-- Splash -->
 <div id="splash" role="alert" aria-live="assertive" aria-atomic="true">
-  ZQ Saúde+<br>
-  <small>Ganhe com o seu conhecimento!</small>
-  <div id="splash-images" aria-hidden="true">
-    <img src="https://img.icons8.com/ios-filled/100/ffffff/heartbeat.png" alt="Ícone batimento cardíaco" />
-    <img src="https://img.icons8.com/ios-filled/100/ffffff/first-aid-kit.png" alt="Ícone kit primeiros socorros" />
-    <img src="https://img.icons8.com/ios-filled/100/ffffff/microscope.png" alt="Ícone microscópio" />
-    <img src="https://img.icons8.com/ios-filled/100/ffffff/pills.png" alt="Ícone pílulas" />
+  <h1>ZQ Saúde+</h1>
+  <p>Ganhe conhecimento e prêmios enquanto cuida da sua saúde!</p>
+  <div class="icons" aria-hidden="true">
+    <svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+      <path d="M20 10a10 10 0 0 1 20 0v10h-4v-10a6 6 0 0 0-12 0v10h-4z"/>
+      <circle cx="32" cy="48" r="10" stroke="#4cd964" stroke-width="2" fill="none"/>
+      <line x1="32" y1="38" x2="32" y2="58" stroke="#4cd964" stroke-width="2"/>
+    </svg>
+    <svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+      <path d="M32 54s22-12 22-28a12 12 0 0 0-24 0 12 12 0 0 0-24 0c0 16 22 28 22 28z"/>
+    </svg>
+    <svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+      <rect x="28" y="10" width="8" height="44"/>
+      <rect x="10" y="28" width="44" height="8"/>
+    </svg>
   </div>
 </div>
 
 <!-- Login / Cadastro -->
-<div class="container" id="loginContainer" role="main" aria-label="Login e Cadastro">
+<div class="container hidden" id="loginContainer" role="main" aria-label="Login e Cadastro">
   <h1>Bem-vindo ao ZQ Saúde+ Quiz</h1>
   <form id="loginForm" aria-describedby="formDesc" novalidate>
     <p id="formDesc">Preencha o formulário para jogar e concorrer a prêmios semanais.</p>
@@ -349,7 +407,7 @@
 </div>
 
 <!-- Quiz -->
-<div class="container" id="quizContainer" role="main" aria-live="polite" aria-atomic="true" aria-label="Quiz de perguntas de saúde">
+<div class="container hidden" id="quizContainer" role="main" aria-live="polite" aria-atomic="true" aria-label="Quiz de perguntas de saúde">
   <div id="question" tabindex="0" aria-live="assertive"></div>
   <div id="answers"></div>
   <div id="timerBar" aria-hidden="true"><div id="timerFill"></div></div>
@@ -359,68 +417,49 @@
 </div>
 
 <!-- Ranking -->
-<div class="container" id="rankingContainer" aria-label="Lista dos maiores pontos">
-  <h2>Top 10 Jogadores da Semana</h2>
+<div class="container hidden" id="rankingContainer" aria-label="Lista dos maiores pontos">
+  <h2>Top 5 Jogadores da Semana</h2>
   <ul id="rankingList" role="list"></ul>
   <button id="btnBackToQuiz" aria-label="Voltar para o quiz">Voltar ao Quiz</button>
 </div>
 
 <!-- Admin -->
-<div class="container" id="adminArea" aria-label="Área administrativa">
+<div class="container hidden" id="adminArea" aria-label="Área administrativa">
   <h2>Área do Administrador</h2>
-  <div id="adminButtons">
-    <button id="btnResetRanking" aria-label="Zerar pontos e ranking">Zerar Ranking</button>
-    <button id="btnViewUsers" aria-label="Ver usuários cadastrados">Ver Usuários</button>
-    <button id="btnLogoutAdmin" aria-label="Sair da área administrativa">Sair Admin</button>
-  </div>
+  <button id="btnResetRanking" class="admin-btn" aria-label="Zerar pontos e ranking">Zerar Ranking</button>
+  <button id="btnViewUsers" class="admin-btn" aria-label="Ver usuários cadastrados">Ver Usuários</button>
+  <button id="btnLogoutAdmin" class="admin-btn" aria-label="Sair da área administrativa">Sair Admin</button>
   <div id="adminUsersList" style="max-height:300px; overflow:auto; margin-top:12px;"></div>
 </div>
 
 <!-- Banner de anúncios fixo no Quiz -->
-<div id="adBanner" aria-label="Anúncio publicitário" role="region">
-  <!-- Aqui você deve inserir seu código real do Google AdSense -->
+<div id="adBanner"
+aria-label="Anúncio publicitário" role="region" style="display:none;">
+  <!-- Código do Google AdSense ou anúncio personalizado -->
   <span>Anúncios Google AdSense - Ganhe enquanto joga!</span>
 </div>
 
-<!-- Áudio do Timer -->
-<audio id="audioTick" src="https://actions.google.com/sounds/v1/alarms/clock_tick.ogg" preload="auto"></audio>
+<!-- Som do timer -->
+<audio id="timerSound" src="https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg" preload="auto"></audio>
 
 <script>
 (() => {
-  // Configurações e variáveis
   const STORAGE_USERS = "zqsaude_users";
-  const ADMIN_EMAIL = "admin@zqsaude.com";
+  const ADMIN_EMAIL = "admin@admin.com";
   const ADMIN_PASS = "ZefraQuiz+";
   const TIMER_SECONDS = 15;
-  const MIN_POINTS_FOR_PRIZE = 10; // Pontos mínimos para aparecer no ranking
-  const MAX_TOP_PLAYERS = 10;
+  const MAX_TOP_PLAYERS = 5;
 
-  let users = [];
+  let users = JSON.parse(localStorage.getItem(STORAGE_USERS)) || [];
   let currentUser = null;
-
-  // Perguntas simuladas (1000 perguntas simples exemplo)
-  const questions = [];
-  for(let i=1; i<=1000; i++) {
-    questions.push({
-      question: `Pergunta ${i}: Qual a função do coração?`,
-      options: [
-        "Bombear sangue",
-        "Filtrar sangue",
-        "Produzir hormônios",
-        "Armazenar energia"
-      ],
-      correctAnswer: "Bombear sangue"
-    });
-  }
-
-  // Estado quiz
+  let questions = [];
   let questionOrder = [];
   let questionIndex = 0;
   let timerInterval = null;
   let timeLeft = TIMER_SECONDS;
-  let audioTick = document.getElementById("audioTick");
+  const timerSound = document.getElementById("timerSound");
 
-  // Elementos DOM
+  // Elements
   const splashEl = document.getElementById("splash");
   const loginContainer = document.getElementById("loginContainer");
   const loginForm = document.getElementById("loginForm");
@@ -441,74 +480,51 @@
   const btnLogoutAdmin = document.getElementById("btnLogoutAdmin");
   const adBanner = document.getElementById("adBanner");
 
-  // Funções utilitárias
-  function getUsers() {
-    const stored = localStorage.getItem(STORAGE_USERS);
-    return stored ? JSON.parse(stored) : [];
-  }
-  function saveUsers() {
-    localStorage.setItem(STORAGE_USERS, JSON.stringify(users));
-  }
+  // Shuffle helper
   function shuffleArray(arr) {
-    for (let i = arr.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
+    for (let i = arr.length -1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i+1));
       [arr[i], arr[j]] = [arr[j], arr[i]];
     }
   }
 
-  // Inicializa
-  function init() {
-    users = getUsers();
+  // Load questions sample
+  function loadQuestions() {
+    questions = [
+      { question: "Qual a função dos glóbulos vermelhos?", options: ["Transportar oxigênio", "Combater infecções", "Produzir hormônios", "Coagular sangue"], correctAnswer: "Transportar oxigênio" },
+      { question: "Qual vitamina é importante para a coagulação?", options: ["Vitamina A", "Vitamina K", "Vitamina C", "Vitamina D"], correctAnswer: "Vitamina K" },
+      { question: "O que é pressão arterial?", options: ["Força do sangue nas artérias", "Nível de açúcar no sangue", "Quantidade de oxigênio no pulmão", "Velocidade da circulação"], correctAnswer: "Força do sangue nas artérias" },
+      { question: "Qual órgão filtra o sangue?", options: ["Fígado", "Rim", "Coração", "Pulmão"], correctAnswer: "Rim" },
+      { question: "O que significa IMC?", options: ["Índice de Massa Corporal", "Índice de Medida Corporal", "Índice de Massa Calórica", "Índice de Medida Calórica"], correctAnswer: "Índice de Massa Corporal" }
+      // Você pode expandir essa lista até 1000 perguntas
+    ];
+    shuffleArray(questions);
     questionOrder = [...questions];
-    shuffleArray(questionOrder);
-
-    setTimeout(() => {
-      splashEl.style.display = "none";
-      showLogin();
-    }, 3500);
   }
 
-  // Mostrar tela login
-  function showLogin() {
-    loginContainer.style.display = "block";
-    quizContainer.style.display = "none";
-    rankingContainer.style.display = "none";
-    adminArea.style.display = "none";
-    adBanner.style.display = "none";
+  function saveUsers() {
+    localStorage.setItem(STORAGE_USERS, JSON.stringify(users));
   }
 
-  // Mostrar quiz
-  function showQuiz() {
-    loginContainer.style.display = "none";
-    quizContainer.style.display = "flex";
-    rankingContainer.style.display = "none";
-    adminArea.style.display = "none";
-    adBanner.style.display = "block";
-    displayQuestion();
-    updateScore();
+  function findUserByEmail(email) {
+    return users.find(u => u.email.toLowerCase() === email.toLowerCase());
   }
 
-  // Mostrar ranking
-  function showRanking() {
-    loginContainer.style.display = "none";
-    quizContainer.style.display = "none";
-    rankingContainer.style.display = "block";
-    adminArea.style.display = "none";
-    adBanner.style.display = "none";
-    updateRanking();
+  function startTimer() {
+    timeLeft = TIMER_SECONDS;
+    timerFill.style.width = "100%";
+    clearInterval(timerInterval);
+    timerInterval = setInterval(() => {
+      timeLeft--;
+      timerFill.style.width = (timeLeft / TIMER_SECONDS) * 100 + "%";
+      if (timeLeft <= 0) {
+        clearInterval(timerInterval);
+        timerSound.play().catch(()=>{});
+        answerQuestion(null);
+      }
+    }, 1000);
   }
 
-  // Mostrar admin
-  function showAdmin() {
-    loginContainer.style.display = "none";
-    quizContainer.style.display = "none";
-    rankingContainer.style.display = "none";
-    adminArea.style.display = "block";
-    adBanner.style.display = "none";
-    renderUsersTable();
-  }
-
-  // Mostrar questão atual
   function displayQuestion() {
     if (questionIndex >= questionOrder.length) {
       shuffleArray(questionOrder);
@@ -517,7 +533,7 @@
     const current = questionOrder[questionIndex];
     questionEl.textContent = current.question;
     answersEl.innerHTML = "";
-    current.options.forEach((opt) => {
+    current.options.forEach(opt => {
       const btn = document.createElement("button");
       btn.className = "answerBtn";
       btn.textContent = opt;
@@ -528,39 +544,13 @@
     startTimer();
   }
 
-  // Começa o timer
-  function startTimer() {
-    timeLeft = TIMER_SECONDS;
-    timerFill.style.width = "100%";
-    clearInterval(timerInterval);
-    playTickSound();
-    timerInterval = setInterval(() => {
-      timeLeft--;
-      timerFill.style.width = (timeLeft / TIMER_SECONDS) * 100 + "%";
-      playTickSound();
-      if (timeLeft <= 0) {
-        clearInterval(timerInterval);
-        answerQuestion(null); // tempo acabou, nenhuma resposta
-      }
-    }, 1000);
-  }
-
-  // Tocar som do tic tac
-  function playTickSound() {
-    // Para evitar sobreposição do som:
-    audioTick.pause();
-    audioTick.currentTime = 0;
-    audioTick.play().catch(() => {});
-  }
-
-  // Responder questão
-  function answerQuestion(selected) {
+  function answerQuestion(selectedAnswer) {
     clearInterval(timerInterval);
     const current = questionOrder[questionIndex];
-    if (selected === current.correctAnswer) {
-      currentUser.points += 10;
+    if (selectedAnswer === current.correctAnswer) {
+      currentUser.points = (currentUser.points || 0) + 10;
     } else {
-      currentUser.points = Math.max(0, currentUser.points - 5);
+      currentUser.points = Math.max(0, (currentUser.points || 0) - 5);
     }
     updateScore();
     questionIndex++;
@@ -568,76 +558,76 @@
     displayQuestion();
   }
 
-  // Atualiza placar
   function updateScore() {
-    scoreBoard.textContent = `Pontos: ${currentUser.points}`;
+    scoreBoard.textContent = `Pontos: ${currentUser.points || 0}`;
   }
 
-  // Atualiza ranking
   function updateRanking() {
     const topUsers = users
-      .filter(u => u.points >= MIN_POINTS_FOR_PRIZE)
-      .sort((a,b) => b.points - a.points)
+      .filter(u => (u.points || 0) > 0)
+      .sort((a,b) => (b.points || 0) - (a.points || 0))
       .slice(0, MAX_TOP_PLAYERS);
     rankingList.innerHTML = "";
     topUsers.forEach((u,i) => {
       const li = document.createElement("li");
-      li.textContent = `${i+1}. ${u.fullName} — ${u.points} pontos`;
+      li.textContent = `${i+1}. ${u.fullName} - ${u.points} pontos`;
       rankingList.appendChild(li);
     });
   }
 
-  // Renderiza tabela usuários admin
-  function renderUsersTable() {
-    if (users.length === 0) {
-      adminUsersList.innerHTML = "<p>Nenhum usuário cadastrado.</p>";
-      return;
-    }
-    let html = `<table aria-label="Tabela de usuários"><thead>
-      <tr><th>Nome</th><th>Email</th><th>Pontos</th><th>Naturalidade</th><th>Localização</th>
-      <th>M-Pesa</th><th>E-mola</th><th>M-Quesh</th><th>PayPal</th><th>Conta Bancária</th></tr></thead><tbody>`;
-    users.forEach(u => {
-    html += `<tr>
-        <td>${u.fullName}</td>
-        <td>${u.email}</td>
-        <td>${u.points}</td>
-        <td>${u.naturalidade || ''}</td>
-        <td>${u.localAtual || ''}</td>
-        <td>${u.mpesa || ''}</td>
-        <td>${u.emola || ''}</td>
-        <td>${u.mquesh || ''}</td>
-        <td>${u.paypal || ''}</td>
-        <td>${u.contaBanco || ''}</td>
-      </tr>`;
-    });
-    html += "</tbody></table>";
-    adminUsersList.innerHTML = html;
-  }
-
-  // Logout geral
-  function logout() {
-    currentUser = null;
-    questionIndex = 0;
-    clearInterval(timerInterval);
-    showLogin();
-  }
-
-  // Reset ranking
   function resetRanking() {
-    if (!confirm("Confirma zerar todos os pontos e ranking?")) return;
-    users.forEach(u => u.points = 0);
+    users.forEach(u => {
+      u.points = 0;
+    });
     saveUsers();
-    alert("Ranking zerado com sucesso!");
-    renderUsersTable();
+    updateRanking();
   }
 
-  // Login ou cadastro
+  function showAdBanner(show) {
+    adBanner.style.display = show ? "block" : "none";
+  }
+
+  // Show/hide views
+  function showSplash() {
+    splashEl.classList.remove("hidden");
+  }
+  function hideSplash() {
+    splashEl.classList.add("hidden");
+  }
+  function showLogin() {
+    loginContainer.classList.remove("hidden");
+  }
+  function hideLogin() {
+    loginContainer.classList.add("hidden");
+  }
+  function showQuiz() {
+    quizContainer.classList.remove("hidden");
+    showAdBanner(true);
+  }
+  function hideQuiz() {
+    quizContainer.classList.add("hidden");
+    showAdBanner(false);
+  }
+  function showRanking() {
+    rankingContainer.classList.remove("hidden");
+  }
+  function hideRanking() {
+    rankingContainer.classList.add("hidden");
+  }
+  function showAdmin() {
+    adminArea.classList.remove("hidden");
+  }
+  function hideAdmin() {
+    adminArea.classList.add("hidden");
+  }
+
+  // Login form submit
   loginForm.addEventListener("submit", e => {
     e.preventDefault();
-    const f = loginForm;
+    const f = e.target;
     const fullName = f.fullName.value.trim();
     const email = f.email.value.trim().toLowerCase();
-    const password = f.password.value.trim();
+    const password = f.password.value;
     const naturalidade = f.naturalidade.value.trim();
     const localAtual = f.localAtual.value.trim();
     const mpesa = f.mpesa.value.trim();
@@ -646,55 +636,114 @@
     const paypal = f.paypal.value.trim();
     const contaBanco = f.contaBanco.value.trim();
 
-    if (!fullName || !email || !password) {
-      alert("Nome, e-mail e senha são obrigatórios.");
-      return;
-    }
-
-    // Login admin especial
-    if (email === ADMIN_EMAIL && password === ADMIN_PASS) {
-      currentUser = { email: ADMIN_EMAIL, fullName: "Administrador", points: 0 };
+    // Admin login
+    if(email === ADMIN_EMAIL && password === ADMIN_PASS) {
+      hideLogin();
       showAdmin();
+      showAdBanner(false);
       return;
     }
 
-    // Procurar usuário
-    let user = users.find(u => u.email === email);
-    if (user) {
-      // Já existe - validar senha
-      if (user.password !== password) {
-        alert("Senha incorreta.");
+    if(!fullName || !email || !password || !naturalidade || !localAtual || !mpesa || !emola) {
+      alert("Preencha todos os campos obrigatórios!");
+      return;
+    }
+
+    let user = findUserByEmail(email);
+
+    if(user) {
+      if(user.password !== password) {
+        alert("Senha incorreta!");
         return;
       }
+      // Login existente
       currentUser = user;
     } else {
-      // Criar novo usuário
-      user = {
-        fullName, email, password,
-        naturalidade, localAtual,
+      // Cadastrar novo usuário
+      currentUser = {
+        fullName, email, password, naturalidade, localAtual,
         mpesa, emola, mquesh, paypal, contaBanco,
-        points: 0
+        points: 0,
       };
-      users.push(user);
+      users.push(currentUser);
       saveUsers();
-      currentUser = user;
-      alert("Cadastro realizado com sucesso! Bem-vindo(a)!");
     }
+
+    hideLogin();
+    hideSplash();
+    loadQuestions();
+    questionIndex = 0;
+    updateScore();
+    displayQuestion();
     showQuiz();
   });
 
-  // Botões quiz
-  btnLogout.onclick = logout;
-  btnViewRanking.onclick = showRanking;
-  btnBackToQuiz.onclick = showQuiz;
+  btnLogout.addEventListener("click", () => {
+    currentUser = null;
+    hideQuiz();
+    showLogin();
+  });
 
-  // Botões admin
-  btnLogoutAdmin.onclick = logout;
-  btnResetRanking.onclick = resetRanking;
-  btnViewUsers.onclick = renderUsersTable;
+  btnViewRanking.addEventListener("click", () => {
+    updateRanking();
+    hideQuiz();
+    showRanking();
+  });
 
-  // Inicializa o app
-  init();
+  btnBackToQuiz.addEventListener("click", () => {
+    hideRanking();
+    showQuiz();
+  });
+
+  // Admin buttons
+  btnResetRanking.addEventListener("click", () => {
+    if(confirm("Tem certeza que deseja zerar os pontos de todos?")) {
+      resetRanking();
+      alert("Ranking zerado com sucesso!");
+    }
+  });
+
+  btnViewUsers.addEventListener("click", () => {
+    adminUsersList.innerHTML = "";
+    if(users.length === 0) {
+      adminUsersList.textContent = "Nenhum usuário cadastrado.";
+      return;
+    }
+    const table = document.createElement("table");
+    const thead = document.createElement("thead");
+    thead.innerHTML = "<tr><th>Nome Completo</th><th>E-mail</th><th>Pontos</th><th>Naturalidade</th><th>Local Atual</th><th>M-Pesa</th><th>E-mola</th><th>M-Quesh</th><th>PayPal</th><th>Conta Bancária</th></tr>";
+    table.appendChild(thead);
+    const tbody = document.createElement("tbody");
+    users.forEach(u => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `<td>${u.fullName}</td>
+                      <td>${u.email}</td>
+                      <td>${u.points || 0}</td>
+                      <td>${u.naturalidade}</td>
+                      <td>${u.localAtual}</td>
+                      <td>${u.mpesa}</td>
+                      <td>${u.emola}</td>
+                      <td>${u.mquesh || "-"}</td>
+                      <td>${u.paypal || "-"}</td>
+                      <td>${u.contaBanco || "-"}</td>`;
+      tbody.appendChild(tr);
+    });
+    table.appendChild(tbody);
+    adminUsersList.appendChild(table);
+  });
+
+  btnLogoutAdmin.addEventListener("click", () => {
+    hideAdmin();
+    showLogin();
+  });
+
+  // Splash desaparece após 4s
+  window.addEventListener("load", () => {
+    setTimeout(() => {
+      hideSplash();
+      showLogin();
+    }, 3800);
+  });
 
 })();
 </script>
